@@ -9,6 +9,17 @@ from yaml import load as yaml_load
 class Template(object):
     files = {}
 
+    def process_file_node(self, key, value, parent=None):
+        if not key in self.files:
+            self.files[key] = []
+        if parent:
+            self.files[parent].append(self.parse_include(key))
+        if isinstance(value, list):
+            for subvalue in value:
+                self.walk_node(subvalue, key)
+        else:
+            self.walk_node(value, key)
+
     def walk_node(self, node, parent=None):
         if not node:
             return
@@ -16,22 +27,18 @@ class Template(object):
             if 'block' == key:
                 self.files[parent].append(self.parse_block(value))
             else:
-                if not key in self.files:
-                    self.files[key] = []
-                if parent:
-                    self.files[parent].append(self.parse_include(key))
-                if isinstance(value, list):
-                    for subvalue in value:
-                        self.walk_node(subvalue, key)
-                else:
-                    self.walk_node(value, key)
+                self.process_file_node(key, value, parent)
 
-    def write_files(self, include_directory):
+    @staticmethod
+    def create_directory(directory_path):
         try:
-            makedirs(include_directory)
+            makedirs(directory_path)
         except OSError as error:
             if EEXIST == error.errno:
                 pass
+
+    def write_files(self, include_directory):
+        self.create_directory(include_directory)
         for file_name, contents in self.files.items():
             with open(join(include_directory, file_name), 'w') as template_file:
                 if contents:
