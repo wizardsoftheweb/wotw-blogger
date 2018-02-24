@@ -23,6 +23,37 @@ class MacroTestCase(TestCase):
         self.macro = Macro()
 
 
+class InstallUnitTests(MacroTestCase):
+    PATH = 'qqq'
+    MACRO_NAME = 'sally'
+    CONTENTS = 'buzzard'
+    WRITE = MagicMock()
+
+    @patch.object(
+        Macro,
+        'create_directory'
+    )
+    @patch(
+        'wotw_blogger.generator.macro.base.open',
+        return_value=MagicMock(
+            __enter__=MagicMock(
+                return_value=MagicMock(
+                    write=WRITE
+                )
+            )
+        )
+    )
+    def test_writes(self, mock_open, mock_create):
+        self.macro.macro_name = self.MACRO_NAME
+        self.macro.contents = self.CONTENTS
+        self.WRITE.assert_not_called()
+        mock_create.assert_not_called()
+        mock_open.assert_not_called()
+        self.macro.install(self.PATH)
+        mock_create.assert_called_once_with(self.PATH)
+        self.WRITE.assert_called_once_with(self.CONTENTS)
+
+
 class CreateDirectoryUnitTests(MacroTestCase):
     PATH = 'qqq'
 
