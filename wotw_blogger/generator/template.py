@@ -50,8 +50,8 @@ class Template(object):
 
     @staticmethod
     def parse_block(title):
-        return """{%% block %s %%}{%% endblock %%}""" % title
+        return "{%% block %s %%}{%% endblock %%}" % title
 
     @staticmethod
     def parse_include(title):
-        return """{%% include '%s' %%}""" % title
+        return "{%% include '%s' %%}" % title
