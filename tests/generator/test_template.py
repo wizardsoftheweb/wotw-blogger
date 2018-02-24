@@ -22,7 +22,15 @@ class TemplateTestCase(TestCase):
         self.template = Template()
 
 
+class ProcessFileNodeUnitTests(TemplateTestCase):
+    """"""
+
+
 class WalkNodeUnitTests(TemplateTestCase):
+    """"""
+
+
+class CreateDirectoryUnitTests(TemplateTestCase):
     """"""
 
 
