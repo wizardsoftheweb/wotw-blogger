@@ -29,7 +29,43 @@ class ProcessFileNodeUnitTests(TemplateTestCase):
 
 
 class WalkNodeUnitTests(TemplateTestCase):
-    """"""
+
+    def setUp(self):
+        TemplateTestCase.setUp(self)
+        block_patcher = patch.object(
+            Template,
+            'parse_block'
+        )
+        self.mock_block = block_patcher.start()
+        self.addCleanup(block_patcher.stop)
+        process_patcher = patch.object(
+            Template,
+            'process_file_node'
+        )
+        self.mock_process = process_patcher.start()
+        self.addCleanup(process_patcher.stop)
+
+    def test_no_node(self):
+        self.mock_block.assert_not_called()
+        self.mock_process.assert_not_called()
+        self.template.walk_node(None)
+        self.mock_block.assert_not_called()
+        self.mock_process.assert_not_called()
+
+    def test_block_node(self):
+        self.template.files = {'zzz': []}
+        self.mock_block.assert_not_called()
+        self.mock_process.assert_not_called()
+        self.template.walk_node({'block': 'qqq'}, 'zzz')
+        self.mock_block.assert_called_once_with('qqq')
+        self.mock_process.assert_not_called()
+
+    def test_file_node(self):
+        self.mock_block.assert_not_called()
+        self.mock_process.assert_not_called()
+        self.template.walk_node({'filename': None})
+        self.mock_block.assert_not_called()
+        self.mock_process.assert_called_once_with('filename', None, None)
 
 
 class CreateDirectoryUnitTests(TemplateTestCase):
