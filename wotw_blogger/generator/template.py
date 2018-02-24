@@ -21,7 +21,7 @@ class Template(object):
             self.walk_node(value, key)
 
     def walk_node(self, node, parent=None):
-        if not node:
+        if not isinstance(node, dict):
             return
         for key, value in node.items():
             if 'block' == key:
