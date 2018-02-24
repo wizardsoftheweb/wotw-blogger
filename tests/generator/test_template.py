@@ -2,10 +2,11 @@
 
 from __future__ import print_function
 
+from collections import OrderedDict
 from errno import EEXIST
 from unittest import TestCase
 
-from mock import MagicMock, patch
+from mock import call, MagicMock, patch
 
 from wotw_blogger.generator import Template
 
@@ -67,7 +68,36 @@ class CreateDirectoryUnitTests(TemplateTestCase):
 
 
 class WriteFilesUnitTests(TemplateTestCase):
-    """"""
+    PATH = 'qqq'
+    FILES = OrderedDict()
+    FILES['one'] = ['a', 'b', 'c']
+    WRITE = MagicMock()
+
+    @patch.object(
+        Template,
+        'create_directory'
+    )
+    @patch(
+        'wotw_blogger.generator.template.open',
+        return_value=MagicMock(
+            __enter__=MagicMock(
+                return_value=MagicMock(
+                    write=WRITE
+                )
+            )
+        )
+    )
+    def test_writes(self, mock_open, mock_create):
+        self.template.files = self.FILES
+        self.WRITE.assert_not_called()
+        mock_create.assert_not_called()
+        mock_open.assert_not_called()
+        self.template.write_files(self.PATH)
+        mock_create.assert_called_once_with(self.PATH)
+        self.WRITE.assert_has_calls([
+            call('a\n\nb\n\nc'),
+            call('\n')
+        ])
 
 
 class BuildUnitTests(TemplateTestCase):
