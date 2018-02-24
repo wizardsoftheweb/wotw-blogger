@@ -39,8 +39,22 @@ class LoadYamlUnitTests(TemplateTestCase):
 
 
 class ParseBlockUnitTests(TemplateTestCase):
-    """"""
+    INPUT = 'qqq'
+    RESULT = "{% block qqq %}{% endblock %}"
+
+    def test_result(self):
+        self.assertEquals(
+            self.RESULT,
+            Template.parse_block(self.INPUT)
+        )
 
 
 class ParseIncludeUnitTests(TemplateTestCase):
-    """"""
+    INPUT = 'qqq'
+    RESULT = "{% include 'qqq' %}"
+
+    def test_result(self):
+        self.assertEquals(
+            self.RESULT,
+            Template.parse_include(self.INPUT)
+        )
