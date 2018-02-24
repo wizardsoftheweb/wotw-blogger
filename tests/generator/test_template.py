@@ -35,7 +35,22 @@ class BuildUnitTests(TemplateTestCase):
 
 
 class LoadYamlUnitTests(TemplateTestCase):
-    """"""
+    PATH = 'qqq'
+    YAML_FILE = MagicMock()
+
+    @patch(
+        'wotw_blogger.generator.template.open',
+        return_value=MagicMock(
+            __enter__=MagicMock(
+                return_value=YAML_FILE
+            )
+        )
+    )
+    @patch('wotw_blogger.generator.template.yaml_load')
+    def test_call(self, mock_load, mock_open):
+        mock_load.assert_not_called()
+        Template.load_yaml(self.PATH)
+        mock_load.assert_called_once_with(self.YAML_FILE)
 
 
 class ParseBlockUnitTests(TemplateTestCase):
