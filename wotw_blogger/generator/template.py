@@ -34,8 +34,8 @@ class Template(object):
         try:
             makedirs(directory_path)
         except OSError as error:
-            if EEXIST == error.errno:
-                pass
+            if EEXIST != error.errno:
+                raise
 
     def write_files(self, include_directory):
         self.create_directory(include_directory)
