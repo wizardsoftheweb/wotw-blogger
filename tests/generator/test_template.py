@@ -31,7 +31,31 @@ class WriteFilesUnitTests(TemplateTestCase):
 
 
 class BuildUnitTests(TemplateTestCase):
-    """"""
+    YAML_PATH = 'qqq'
+    INCLUDE_DIRECTORY = 'zzz'
+    DATA = MagicMock()
+
+    @patch.object(
+        Template,
+        'load_yaml',
+        return_value=DATA
+    )
+    @patch.object(
+        Template,
+        'walk_node'
+    )
+    @patch.object(
+        Template,
+        'write_files'
+    )
+    def test_construction(self, mock_files, mock_node, mock_load):
+        mock_load.assert_not_called()
+        mock_node.assert_not_called()
+        mock_files.assert_not_called()
+        self.template.build(self.YAML_PATH, self.INCLUDE_DIRECTORY)
+        mock_load.assert_called_once_with(self.YAML_PATH)
+        mock_node.assert_called_once_with(self.DATA)
+        mock_files.assert_called_once_with(self.INCLUDE_DIRECTORY)
 
 
 class LoadYamlUnitTests(TemplateTestCase):
