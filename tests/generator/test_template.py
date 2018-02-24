@@ -20,3 +20,27 @@ class TemplateTestCase(TestCase):
 
     def construct_template(self):
         self.template = Template()
+
+
+class WalkNodeUnitTests(TemplateTestCase):
+    """"""
+
+
+class WriteFilesUnitTests(TemplateTestCase):
+    """"""
+
+
+class BuildUnitTests(TemplateTestCase):
+    """"""
+
+
+class LoadYamlUnitTests(TemplateTestCase):
+    """"""
+
+
+class ParseBlockUnitTests(TemplateTestCase):
+    """"""
+
+
+class ParseIncludeUnitTests(TemplateTestCase):
+    """"""
