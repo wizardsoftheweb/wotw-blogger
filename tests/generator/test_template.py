@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 
+from errno import EEXIST
 from unittest import TestCase
 
 from mock import MagicMock, patch
@@ -31,7 +32,38 @@ class WalkNodeUnitTests(TemplateTestCase):
 
 
 class CreateDirectoryUnitTests(TemplateTestCase):
-    """"""
+    PATH = 'qqq'
+
+    @patch(
+        'wotw_blogger.generator.template.makedirs',
+        side_effect=OSError()
+    )
+    def test_creating_error(self, mock_make):
+        mock_make.assert_not_called()
+        self.assertRaises(
+            OSError,
+            Template.create_directory,
+            self.PATH
+        )
+
+    @patch(
+        'wotw_blogger.generator.template.makedirs',
+    )
+    def test_creating_existing(self, mock_make):
+        error = OSError()
+        error.errno = EEXIST
+        mock_make.side_effect = error
+        mock_make.assert_not_called()
+        Template.create_directory(self.PATH)
+        mock_make.assert_called_once_with(self.PATH)
+
+    @patch(
+        'wotw_blogger.generator.template.makedirs'
+    )
+    def test_creating_new(self, mock_make):
+        mock_make.assert_not_called()
+        Template.create_directory(self.PATH)
+        mock_make.assert_called_once_with(self.PATH)
 
 
 class WriteFilesUnitTests(TemplateTestCase):
