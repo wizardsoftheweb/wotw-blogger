@@ -25,7 +25,55 @@ class TemplateTestCase(TestCase):
 
 
 class ProcessFileNodeUnitTests(TemplateTestCase):
-    """"""
+
+    def setUp(self):
+        TemplateTestCase.setUp(self)
+        include_patcher = patch.object(
+            Template,
+            'parse_include',
+            side_effect=lambda x: x
+        )
+        self.mock_include = include_patcher.start()
+        self.addCleanup(include_patcher.stop)
+        walk_patcher = patch.object(
+            Template,
+            'walk_node'
+        )
+        self.mock_walk = walk_patcher.start()
+        self.addCleanup(walk_patcher.stop)
+
+    def test_files_creation(self):
+        self.assertDictEqual(
+            {},
+            self.template.files
+        )
+        self.template.process_file_node('key', 'value')
+        self.assertDictEqual(
+            {'key': []},
+            self.template.files
+        )
+
+    def test_parent_insertion(self):
+        self.template.files['parent'] = []
+        self.template.process_file_node('key', 'value', 'parent')
+        self.assertEquals(
+            ['key'],
+            self.template.files['parent']
+        )
+
+    def test_not_list_value(self):
+        self.mock_walk.assert_not_called()
+        self.template.process_file_node('key', 'value')
+        self.mock_walk.assert_called_once_with('value', 'key')
+
+    def test_list_value(self):
+        value = ['one', 'two', 'three']
+        self.mock_walk.assert_not_called()
+        self.template.process_file_node('key', value)
+        self.assertEquals(
+            len(value),
+            self.mock_walk.call_count
+        )
 
 
 class WalkNodeUnitTests(TemplateTestCase):
