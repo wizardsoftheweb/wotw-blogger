@@ -30,3 +30,15 @@ class ConstructorUnitTests(CompilerTestCase):
         self.assertIsNone(self.compiler.post_path)
         self.assertIsNone(self.compiler.template_path)
         self.assertIsNone(self.compiler.build_path)
+
+
+class BuildJinjaUnitTests(CompilerTestCase):
+
+    @patch('wotw_blogger.compiler.Environment')
+    @patch('wotw_blogger.compiler.FileSystemLoader')
+    def test_construction(self, mock_file, mock_env):
+        mock_env.assert_not_called()
+        mock_file.assert_not_called()
+        self.compiler.build_jinja()
+        mock_env.assert_called_once()
+        mock_file.assert_called_once()
