@@ -7,3 +7,4 @@
 
 from .generator import *
 from .post import Post
+from .compiler import Compiler
