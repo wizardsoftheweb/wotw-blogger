@@ -18,7 +18,7 @@ class Compiler(object):
 
     def build_jinja(self):
         jinja_env = Environment(
-            loader=FileSystemLoader(self.template_path)
+            loader=FileSystemLoader([self.post_path, self.template_path])
         )
         jinja_env.globals['highlight_block'] = self.highlight_block
         return jinja_env
