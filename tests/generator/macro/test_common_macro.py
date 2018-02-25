@@ -34,7 +34,7 @@ class InstallUnitTests(MacroTestCase):
         'create_directory'
     )
     @patch(
-        'wotw_blogger.generator.macro.base.open',
+        'wotw_blogger.generator.macro.common_macro.open',
         return_value=MagicMock(
             __enter__=MagicMock(
                 return_value=MagicMock(
@@ -58,7 +58,7 @@ class CreateDirectoryUnitTests(MacroTestCase):
     PATH = 'qqq'
 
     @patch(
-        'wotw_blogger.generator.macro.base.makedirs',
+        'wotw_blogger.generator.macro.common_macro.makedirs',
         side_effect=OSError()
     )
     def test_creating_error(self, mock_make):
@@ -70,7 +70,7 @@ class CreateDirectoryUnitTests(MacroTestCase):
         )
 
     @patch(
-        'wotw_blogger.generator.macro.base.makedirs',
+        'wotw_blogger.generator.macro.common_macro.makedirs',
     )
     def test_creating_existing(self, mock_make):
         error = OSError()
@@ -81,7 +81,7 @@ class CreateDirectoryUnitTests(MacroTestCase):
         mock_make.assert_called_once_with(self.PATH)
 
     @patch(
-        'wotw_blogger.generator.macro.base.makedirs'
+        'wotw_blogger.generator.macro.common_macro.makedirs'
     )
     def test_creating_new(self, mock_make):
         mock_make.assert_not_called()
