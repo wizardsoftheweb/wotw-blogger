@@ -41,19 +41,22 @@ class InitialRenderUnitTests(PostTestCase):
     def setUp(self):
         PostTestCase.setUp(self)
         self.mock_render = MagicMock()
-        self.mock_jinja = MagicMock(
+        self.mock_template = MagicMock(
             return_value=MagicMock(
                 render=self.mock_render
             )
+        )
+        self.mock_jinja = MagicMock(
+            get_template=self.mock_template
         )
         self.post.jinja_to_use = self.mock_jinja
         self.post.post_basename = self.BASENAME
 
     def test_render(self):
         self.mock_render.assert_not_called()
-        self.mock_jinja.assert_not_called()
+        self.mock_template.assert_not_called()
         self.post.initial_render()
-        self.mock_jinja.assert_called_once_with(self.BASENAME)
+        self.mock_template.assert_called_once_with(self.BASENAME)
         self.mock_render.assert_called_once()
 
 
