@@ -58,7 +58,42 @@ class InitialRenderUnitTests(PostTestCase):
 
 
 class BuildPostTocUnitTests(PostTestCase):
-    """"""
+    CONTENT = 'qqq'
+    BLOCK_FREE = '### HEADLINE'
+
+    def setUp(self):
+        PostTestCase.setUp(self)
+        strip_patcher = patch.object(
+            Post,
+            'strip_code_blocks',
+            return_value=self.BLOCK_FREE
+        )
+        self.mock_strip = strip_patcher.start()
+        self.addCleanup(strip_patcher.stop)
+        parse_patcher = patch.object(
+            Post,
+            'parse_headline',
+            return_value=['one', 'two']
+        )
+        self.mock_parse = parse_patcher.start()
+        self.addCleanup(parse_patcher.stop)
+        create_patcher = patch.object(
+            Post,
+            'create_new_toc_line'
+        )
+        self.mock_create = create_patcher.start()
+        self.addCleanup(create_patcher.stop)
+        swap_patcher = patch.object(
+            Post,
+            'swap_toc'
+        )
+        self.mock_swap = swap_patcher.start()
+        self.addCleanup(swap_patcher.stop)
+
+    def test_strip(self):
+        self.mock_strip.assert_not_called()
+        self.post.build_post_toc(self.CONTENT)
+        self.mock_strip.assert_called_once_with(self.CONTENT)
 
 
 class FinalRenderUnitTests(PostTestCase):
