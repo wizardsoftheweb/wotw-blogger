@@ -192,7 +192,16 @@ class CreateNewTocLineUnitTests(PostTestCase):
 
 
 class SwapTocUnitTests(PostTestCase):
-    """"""
+    INPUT = """
+    <!-- wotw_toc -->
+"""
+    RESULT = 'qqq'
+
+    def test_swap(self):
+        self.assertEquals(
+            self.RESULT,
+            Post.swap_toc('qqq', self.INPUT)
+        )
 
 
 class StripWhitespaceUnitTests(PostTestCase):
