@@ -78,6 +78,10 @@ class Post(object):
         with open(output_filename, 'w+') as built_file:
             built_file.write(contents)
 
+    def build(self):
+        contents = self.final_render()
+        self.write_markdown(contents)
+
     @staticmethod
     def strip_code_blocks(content):
         return sub(Post.PATTERNS['CODE_BLOCKS'], '', content, 0)
