@@ -135,7 +135,24 @@ class WriteMarkdownUnitTests(PostTestCase):
 
 
 class StripCodeBlocksUnitTests(PostTestCase):
-    """"""
+    INPUT = """
+test
+```
+qqq
+```
+fin
+"""
+    RESULT = """
+test
+
+fin
+"""
+
+    def test_strip(self):
+        self.assertEquals(
+            self.RESULT,
+            Post.strip_code_blocks(self.INPUT)
+        )
 
 
 class ParseHeadlineUnitTests(PostTestCase):
