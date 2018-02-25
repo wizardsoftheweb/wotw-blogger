@@ -5,8 +5,10 @@ from os import makedirs
 from os.path import join
 from yaml import load as yaml_load
 
+from wotw_blogger.generator import Generator
 
-class Template(object):
+
+class Template(Generator):
     files = {}
 
     def process_file_node(self, key, value, parent=None):
@@ -28,14 +30,6 @@ class Template(object):
                 self.files[parent].append(self.parse_block(value))
             else:
                 self.process_file_node(key, value, parent)
-
-    @staticmethod
-    def create_directory(directory_path):
-        try:
-            makedirs(directory_path)
-        except OSError as error:
-            if EEXIST != error.errno:
-                raise
 
     def write_files(self, include_directory):
         self.create_directory(include_directory)

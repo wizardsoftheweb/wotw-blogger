@@ -116,41 +116,6 @@ class WalkNodeUnitTests(TemplateTestCase):
         self.mock_process.assert_called_once_with('filename', None, None)
 
 
-class CreateDirectoryUnitTests(TemplateTestCase):
-    PATH = 'qqq'
-
-    @patch(
-        'wotw_blogger.generator.template.makedirs',
-        side_effect=OSError()
-    )
-    def test_creating_error(self, mock_make):
-        mock_make.assert_not_called()
-        self.assertRaises(
-            OSError,
-            Template.create_directory,
-            self.PATH
-        )
-
-    @patch(
-        'wotw_blogger.generator.template.makedirs',
-    )
-    def test_creating_existing(self, mock_make):
-        error = OSError()
-        error.errno = EEXIST
-        mock_make.side_effect = error
-        mock_make.assert_not_called()
-        Template.create_directory(self.PATH)
-        mock_make.assert_called_once_with(self.PATH)
-
-    @patch(
-        'wotw_blogger.generator.template.makedirs'
-    )
-    def test_creating_new(self, mock_make):
-        mock_make.assert_not_called()
-        Template.create_directory(self.PATH)
-        mock_make.assert_called_once_with(self.PATH)
-
-
 class WriteFilesUnitTests(TemplateTestCase):
     PATH = 'qqq'
     FILES = OrderedDict()
