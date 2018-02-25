@@ -39,7 +39,7 @@ class Post(object):
         self.build_path = build_path
 
     def initial_render(self):
-        template = self.jinja_to_use(self.post_basename)
+        template = self.jinja_to_use.get_template(self.post_basename)
         content = template.render(
             current_tag=splitext(self.post_basename)[0].replace('.md', '')
         )
