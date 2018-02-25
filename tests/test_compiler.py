@@ -61,3 +61,12 @@ class CompileEverythingUnitTests(CompilerTestCase):
             len(self.FILES),
             mock_post.call_count
         )
+
+
+class HighlightBlockUnitTests(CompilerTestCase):
+
+    @patch('wotw_blogger.compiler.Block')
+    def test_highlight(self, mock_block):
+        mock_block.assert_not_called()
+        Compiler.highlight_block('qqq')
+        mock_block.assert_called_once()
