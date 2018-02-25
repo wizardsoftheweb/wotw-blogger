@@ -42,3 +42,22 @@ class BuildJinjaUnitTests(CompilerTestCase):
         self.compiler.build_jinja()
         mock_env.assert_called_once()
         mock_file.assert_called_once()
+
+
+class CompileEverythingUnitTests(CompilerTestCase):
+    FILES = ['one', 'two']
+
+    @patch('wotw_blogger.compiler.listdir', return_value=FILES)
+    @patch.object(Compiler, 'build_jinja')
+    @patch('wotw_blogger.compiler.Post')
+    def test_compilation(self, mock_post, mock_build, mock_list):
+        mock_list.assert_not_called()
+        mock_build.assert_not_called()
+        mock_post.assert_not_called()
+        self.compiler.compile_everything()
+        mock_list.assert_called_once()
+        mock_build.assert_called_once_with()
+        self.assertEquals(
+            len(self.FILES),
+            mock_post.call_count
+        )
