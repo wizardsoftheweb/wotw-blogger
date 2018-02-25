@@ -6,3 +6,4 @@
 # pylint: disable=wildcard-import
 
 from .generator import *
+from .post import Post
