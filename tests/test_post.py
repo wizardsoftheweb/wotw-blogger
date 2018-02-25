@@ -156,7 +156,22 @@ fin
 
 
 class ParseHeadlineUnitTests(PostTestCase):
-    """"""
+    INPUT = [
+        ['1qqq', {}],
+        ['2qqq', {'qqq': 0}]
+    ]
+
+    RESULT = [
+        ['qqq', {'qqq': 0}],
+        ['qqq1', {'qqq': 1}]
+    ]
+
+    def test_headlines(self):
+        for index in range(len(self.INPUT)):
+            self.assertEquals(
+                self.RESULT[index],
+                Post.parse_headline(*self.INPUT[index])
+            )
 
 
 class CreateNewTocLineUnitTests(PostTestCase):
