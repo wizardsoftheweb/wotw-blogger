@@ -134,6 +134,18 @@ class WriteMarkdownUnitTests(PostTestCase):
         self.WRITE.assert_called_once_with(self.CONTENTS)
 
 
+class BuildUnitTests(PostTestCase):
+
+    @patch.object(Post, 'final_render')
+    @patch.object(Post, 'write_markdown')
+    def test_result(self, mock_write, mock_render):
+        mock_render.assert_not_called()
+        mock_write.assert_not_called()
+        self.post.build()
+        mock_render.assert_called_once()
+        mock_write.assert_called_once()
+
+
 class StripCodeBlocksUnitTests(PostTestCase):
     INPUT = """
 test
