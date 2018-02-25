@@ -112,7 +112,26 @@ class FinalRenderUnitTests(PostTestCase):
 
 
 class WriteMarkdownUnitTests(PostTestCase):
-    """"""
+    CONTENTS = 'buzzard'
+    WRITE = MagicMock()
+
+    @patch('wotw_blogger.post.join')
+    @patch(
+        'wotw_blogger.post.open',
+        return_value=MagicMock(
+            __enter__=MagicMock(
+                return_value=MagicMock(
+                    write=WRITE
+                )
+            )
+        )
+    )
+    def test_writes(self, mock_open, mock_create):
+        self.WRITE.assert_not_called()
+        mock_create.assert_not_called()
+        mock_open.assert_not_called()
+        self.post.write_markdown(self.CONTENTS)
+        self.WRITE.assert_called_once_with(self.CONTENTS)
 
 
 class StripCodeBlocksUnitTests(PostTestCase):
