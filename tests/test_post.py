@@ -97,7 +97,18 @@ class BuildPostTocUnitTests(PostTestCase):
 
 
 class FinalRenderUnitTests(PostTestCase):
-    """"""
+
+    @patch.object(Post, 'initial_render')
+    @patch.object(Post, 'build_post_toc')
+    @patch.object(Post, 'strip_whitespace')
+    def test_result(self, mock_white, mock_build, mock_render):
+        mock_render.assert_not_called()
+        mock_build.assert_not_called()
+        mock_white.assert_not_called()
+        self.post.final_render()
+        mock_render.assert_called_once()
+        mock_build.assert_called_once()
+        mock_white.assert_called_once()
 
 
 class WriteMarkdownUnitTests(PostTestCase):
