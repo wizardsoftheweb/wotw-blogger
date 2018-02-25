@@ -22,3 +22,43 @@ class PostTestCase(TestCase):
 
     def construct_post(self):
         self.post = Post(None, None, None)
+
+
+class ConstructorUnitTests(PostTestCase):
+    """"""
+
+
+class InitialRenderUnitTests(PostTestCase):
+    """"""
+
+
+class BuildPostTocUnitTests(PostTestCase):
+    """"""
+
+
+class FinalRenderUnitTests(PostTestCase):
+    """"""
+
+
+class WriteMarkdownUnitTests(PostTestCase):
+    """"""
+
+
+class StripCodeBlocksUnitTests(PostTestCase):
+    """"""
+
+
+class ParseHeadlineUnitTests(PostTestCase):
+    """"""
+
+
+class CreateNewTocLineUnitTests(PostTestCase):
+    """"""
+
+
+class SwapTocUnitTests(PostTestCase):
+    """"""
+
+
+class StripWhitespaceUnitTests(PostTestCase):
+    """"""
