@@ -175,7 +175,20 @@ class ParseHeadlineUnitTests(PostTestCase):
 
 
 class CreateNewTocLineUnitTests(PostTestCase):
-    """"""
+    INPUT = [
+        ['#', 'q q q', 'qqq'],
+    ]
+
+    RESULT = [
+        '  - [q q q](#qqq)\n',
+    ]
+
+    def test_headlines(self):
+        for index in range(len(self.INPUT)):
+            self.assertEquals(
+                self.RESULT[index],
+                Post.create_new_toc_line(*self.INPUT[index])
+            )
 
 
 class SwapTocUnitTests(PostTestCase):
