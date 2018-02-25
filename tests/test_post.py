@@ -205,4 +205,21 @@ class SwapTocUnitTests(PostTestCase):
 
 
 class StripWhitespaceUnitTests(PostTestCase):
-    """"""
+    INPUT = """
+
+
+
+```
+
+
+"""
+    RESULT = """
+```
+
+"""
+
+    def test_clean(self):
+        self.assertEquals(
+            self.RESULT,
+            Post.strip_whitespace(self.INPUT)
+        )
