@@ -52,38 +52,3 @@ class InstallUnitTests(MacroTestCase):
         self.macro.install(self.PATH)
         mock_create.assert_called_once_with(self.PATH)
         self.WRITE.assert_called_once_with(self.CONTENTS)
-
-
-class CreateDirectoryUnitTests(MacroTestCase):
-    PATH = 'qqq'
-
-    @patch(
-        'wotw_blogger.generator.macro.common_macro.makedirs',
-        side_effect=OSError()
-    )
-    def test_creating_error(self, mock_make):
-        mock_make.assert_not_called()
-        self.assertRaises(
-            OSError,
-            Macro.create_directory,
-            self.PATH
-        )
-
-    @patch(
-        'wotw_blogger.generator.macro.common_macro.makedirs',
-    )
-    def test_creating_existing(self, mock_make):
-        error = OSError()
-        error.errno = EEXIST
-        mock_make.side_effect = error
-        mock_make.assert_not_called()
-        Macro.create_directory(self.PATH)
-        mock_make.assert_called_once_with(self.PATH)
-
-    @patch(
-        'wotw_blogger.generator.macro.common_macro.makedirs'
-    )
-    def test_creating_new(self, mock_make):
-        mock_make.assert_not_called()
-        Macro.create_directory(self.PATH)
-        mock_make.assert_called_once_with(self.PATH)
