@@ -22,6 +22,7 @@ class Compiler(object):
             loader=FileSystemLoader([self.post_path, self.template_path])
         )
         jinja_env.globals['highlight_block'] = self.highlight_block
+        jinja_env.filters['basename'] = self.basename
         return jinja_env
 
     def compile_everything(self):
