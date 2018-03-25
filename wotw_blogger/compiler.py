@@ -1,6 +1,7 @@
 # pylint: disable=W,C,R
 
 from os import listdir
+from os.path import basename
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -33,3 +34,7 @@ class Compiler(object):
     def highlight_block(content, **kwargs):
         blob = Block(content, inline_css=True, **kwargs)
         return blob.highlighted_blob
+
+    @staticmethod
+    def basename(file_path):
+        return basename(file_path)
